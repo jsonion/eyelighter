@@ -63,11 +63,12 @@ const rxUrlLocation = Object.assign((bfr=[],
  (bfr[2]=(
  {   param: 1,
       hash: 3 }),
-  new RegExp("([^=#])" +
+  new RegExp("([^=#]+" +
  "(?:"   +   "="       + "(?<s>[\"'])?"
                        + "[^=#]+"
                        + "\\k<s>?"
-         +   ")?"      + "([?#])?",  'g'))
+         +   ")?"      + ")"
+                       + "([?#])?",  'g'))
 ]), ...bfr);
 
 
