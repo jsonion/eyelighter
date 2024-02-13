@@ -29,7 +29,7 @@ function (request, sender, sendResponse) {
 
              url
           =  reduceURL(request[`url`])
-               .filter(component => component);
+               .filter(part => part.length).flatten();
 
          if (!highlights[url]) highlights[url]=[];
          return sendResponse(  highlights[url]  );
@@ -232,9 +232,11 @@ function reduceURL (url, removeRoutes=[],
    rxParams(url, routes, rx.route, step = (2),
            removeRoutes, removeRoutesObj);
 
+                               if (step == 3)
    rxParams(url, params, rx.param, step = (3),
            removeParams, removeParamsObj);
 
+                               if (step == 4)
    rxParams(url,   hash, rx.hash,  step = (4),
            removeHashes, removeHashesObj);
 
