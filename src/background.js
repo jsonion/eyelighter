@@ -29,7 +29,8 @@ function (request, sender, sendResponse) {
 
              url
           =  reduceURL(request[`url`])
-               .filter(part => part.length).flatten();
+               .filter(part => part.length)
+               .flatten();
 
          if (!highlights[url]) highlights[url]=[];
          return sendResponse(  highlights[url]  );
@@ -61,14 +62,13 @@ const rxUrlLocation = Object.assign((bfr=[],
      /\/([^/])([?#])?/g),
 
  (bfr[2]=(
- {   param: 1,
+ {   param: 2,
       hash: 3 }),
-  new RegExp("([^=#]+" +
- "(?:"   +   "="       + "(?<s>[\"'])?"
-                       + "[^=#]+"
-                       + "\\k<s>?"
-         +   ")?"      + ")"
-                       + "([?#])?",  'g'))
+  new RegExp("(([?&]" + "[^=#&]+"
+                      +
+ "(?:"   +   "="      + "[^#&]+"
+         +   ")?"     + "))"
+                      + "([?#])?",  'g'))
 ]), ...bfr);
 
 
