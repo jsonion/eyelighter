@@ -7,15 +7,15 @@ class reactiveComponentOnion extends Object {
   }
 
   static sourced = new Map(/*^^*/);
-__modifyState (STATE_, path=[""], _MERGE) {
-    if  (this.formatInput(propObject, path))
-                         [propObject, path] =
-         this.formatInput(propObject, path);
+__modifyState (STATE_, path=[""], _MERGE=null) {
+    if  (this.formatInput(STATE_, path))
+                         [STATE_, path] =
+         this.formatInput(STATE_, path);
          else throw (";");
         /****       (()))
-  */////
-    this.traverseTree(
-    this.state, path, STATE_, _MERGE=false);
+*///////
+  return this.traverseTree(
+         this.state, path, STATE_, _MERGE);
   }
 
   static
@@ -31,27 +31,37 @@ __formatInput=[];
      ===       propObj[ 1 ]  ) return (
                formatInput[1]
                              );
-   /////////////************/
+   ////////////*************/
 
     if (typeof propObj     != "object"
     ||  typeof propObjPath != "string"
     &&        !propObjPath instanceof Array)
         return false;
 
-    if (typeof propObjPath    === "string") {
-    if ((      propObjPath[0] ===    "\\"))
+    if (typeof propObjPath    === "string")
+        switch
+       (       propObjPath[0]) {
+         case 
+         "\\": propObjPath =
                propObjPath
-             = propObjPath
-                .substring(1).split("\\.");
-    else if (( propObjPath[0] ===    "\."))
+                .substring(1).split("\\."); break
+         case 
+         "\.": propObjPath =
                propObjPath
-             = propObjPath
-                .substring(1).split("\.");
-    }
+                .substring(1).split("\.");  break
 
-         __formatInput.splice(0, 3, propObj, 
-                                    propObjPath);
-    return propObjPath;
+               default:
+               propObjPath =
+              [propObjPath];
+
+    } ////////************/
+
+             __formatInput.splice(0, 3,
+               propObj, 
+               propObjPath);
+
+      return  [propObj,
+               propObjPath];
   }
 
   static traverseTree (propObject,  propObjPath,
@@ -63,10 +73,10 @@ __formatInput=[];
              if
             (__formatInput[2]    &&
              __formatInput[0]
-     ===       propObj[ 1 ]  ) return (
-                                true
-                             );
-   /////////////************/
+     ===       propObject[ 1 ]) return (
+                                 true
+                              );
+   /////////////*************/
 
     if  (this.formatInput(propObject, subkey))
                          [propObject, subkey] =
@@ -97,8 +107,9 @@ __formatInput=[];
       :  propObject[key].push(value);
     else propObject[key] = (value);
 
-    this.__formatInput[2]
+       __formatInput[2]
             = (true);
+    return    (true);
   }
 
   assignState (propObj,
@@ -106,9 +117,11 @@ __formatInput=[];
     var
     keyNames,   defaultVal,    FUNC____;
 
-    if (this.formatInput(propObject, propObjPath))
+    if (this.formatInput(propObject, propObjPath)) {
                         [propObject, propObjPath]
-     =  this.formatInput(propObject, propObjPath);
+      = this.formatInput(propObject, propObjPath);
+    }   else throw (";");
+ 
 
    /////////////                    /////////////
   /*****       [  case performant  ]
@@ -191,13 +204,13 @@ __formatInput=[];
         iterate = propObj.values();
 
     var  defaultArr
-     = (!defaultVal instanceof Array ) && false;
+     = (!defaultVal instanceof Array ) && null;
 
     var  defaultObj
-     = (!defaultVal instanceof Object) && false;
+     = (!defaultVal instanceof Object) && null;
 
     var  val, bfr;
-    for (let [i,name] of fieldNames.entries()) {
+    for (let [i, name] of keyNames.entries()) {
      switch
      (true) {
       case   FUNC____         /////////**********
@@ -242,8 +255,9 @@ __formatInput=[];
                               /////////**********
                                         continue;
     /**********///\/\/\/\/\///
-       break
-      default:  STATE_[name]   =   defaultVal;
+      default: 
+         if   (undefined      !== (defaultVal))
+                STATE_[name]   =   defaultVal;
 
     }    if    (typeof
                 STATE_[name] === ("function")
@@ -257,10 +271,6 @@ __formatInput=[];
 
   /*/\/\/\/\/\/\/\/ \ / \  /\/\/\/\/\/ \ / \/\/*/
 
-    function isBind (fn) {
-      return fn.name.startsWith("bound ");
-    }
-
     function getVal (key=("")) {
         if   (iterate !== undefined)
       { if   (iterate)
@@ -270,6 +280,10 @@ __formatInput=[];
        else
       return props
             [ key ]}
+
+    function isBind (fn) {
+      return fn.name.startsWith("bound ");
+    }
   }
 
   formatState (propObject, subkey,
@@ -330,6 +344,96 @@ __formatInput=[];
         ////////*************/
 
   }      return stylePropVal;
-}}
+  }
+}
+
+
+const rxHandleNameRandom = Object.assign(
+    function (string, rx = this) {
+          if (rx[0].test(string))
+           {  return (!false)   }
+
+          var match;  rx[1].lastIndex=0;
+          if (match = rx[1].exec(string))
+          if (match[ 
+
+                 rx.singleCaps
+               
+                                 ]
+          &&     match.index     !== 0
+          &&     rx[1].lastIndex !== 0
+          &&     rx[1].lastIndex !== string
+                                    .length)
+           {     return (!false)     }
+
+
+          if (match = rx[2].exec(string.match))
+          if (rx[2].test(string)
+          && !match[ 
+
+                 rx.endRegular  
+            
+                                    ])
+           {     return (!false)     }
+                   
+                  else
+                 return (
+                 !true
+           );  //////////**********/
+  },[
+                                new RegExp(
+          "^"       +
+  "(?:" + "([0-9])" +
+   "|"  + "([a-z]"  + "[A-Z0-9])" +
+   "|"  + "(-)"     + ")",          'g'),
+
+                                new RegExp(
+  "(?:" + "([^a-zA-Z0-9\-_])"     +
+   "|"  + "(--)"                  +
+   "|"  + "(___)"                 +
+   "|"  + "([A-Z][0-9])"          + ")",
+                                    'g'),
+
+                                new RegExp(
+  "(?:" + "([\-_])"        +
+   "|"  + "([0-9]+[A-Z]?)" +
+   "|"  + "([A-Z]?[0-9]+)" +
+   "|"  + "   ([a-zA-Z])"  + ")$",  'g'),
+
+  ],{   startNumeric: 1,
+        startNonCaps: 2,
+        startDash:    3,
+
+              symbol: 1,
+          doubleDash: 2,
+          underscore: 3,
+          singleCaps: 4,
+
+             endDash: 1, endRegular:  4,
+                         endNumeric1: 3, 
+                         endNumericB: 2,
+});
+
+function mapUniqueHandles (elem) {
+     var cls=[], id, tagName;
+     if  (
+        !(id = elem.getAttribute("id")) &&
+         (      elem.classList.length))        {
+     for (let  className  of  elem.classList ) {
+      if (rxHandleNameRandom(   className   )) {
+                    cls.push(   className   );
+                    break;
+      }}
+
+      if (document.querySelector(
+   `${elem.tagName}.${className.join('.')}`) 
+  === elem)
+      return [
+              "", cls, elem.tagName
+                                   ]}
+ else if (id)
+  return [id];
+}
 
 export default reactiveComponentOnion;
+export { rxHandleNameUnique, mapUniqueHandles };
