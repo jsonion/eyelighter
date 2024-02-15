@@ -1,0 +1,70 @@
+/* A, DIV [!!!] */
+
+.hexagon a, .hexagon div {
+	display: block;
+	width: 100%;
+	height: 100%;
+	position: absolute;
+}
+
+.hexagon a,
+.hexagon div {
+	cursor: pointer;
+	opacity: 0.7;
+}
+
+.hexagon a:hover,
+.hexagon a:focus,
+.hexagon div:hover,
+.hexagon div:focus {
+	opacity: 1;
+	box-shadow: none !important;
+	outline: 0px !important;
+}
+
+.hexagon .locked {
+	opacity: 0.2;
+}
+
+.hexagon .locked:hover,
+.hexagon .locked:focus {
+	opacity: 0.2;
+}
+
+
+/* Polygon definitions */
+
+.hexagon .a {
+	clip-path: polygon(6.8488% 74.74%, 50.0151% 100%, 93.1512% 74.74%);
+	z-index: 1;
+}
+
+.hexagon .b {
+	clip-path: polygon(71.5756% 37.3698%, 82.3635% 56.0548%, 93.1514% 74.74%, 71.5756% 74.74%, 49.9999% 74.74%, 60.7878% 56.0548%);
+	z-index: 2;
+}
+
+.hexagon .c {
+	clip-path: polygon(93.1511% 74.7401%, 93.3061% 24.4885%, 49.9999% 0%);
+	z-index: 3;
+}
+
+.hexagon .d {
+	clip-path: polygon(50% 0%, 60.7879% 18.685%, 71.5757% 37.3703%, 50% 37.3703%, 28.4243% 37.3703%, 39.2122% 18.685%);
+	z-index: 4;
+}
+
+.hexagon .e {
+	clip-path: polygon(49.9999% 0%, 6.4034% 24.9916%, 6.8487% 74.74%);
+	z-index: 5;
+}
+
+.hexagon .f {
+	clip-path: polygon(28.4245% 37.3698%, 39.2124% 56.0548%, 50.0002% 74.74%, 28.4245% 74.74%, 6.8488% 74.74%, 17.6366% 56.0548%);
+	z-index: 6;
+}
+
+.hexagon .center {
+	clip-path: polygon(49.9996% 74.7408%, 39.2117% 56.0557%, 28.4239% 37.3705%, 49.9996% 37.3705%, 71.5753% 37.3705%, 60.7875% 56.0557%);
+	z-index: 7;
+}
