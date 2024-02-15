@@ -1,10 +1,10 @@
 {
-let bfr;
+var bfr=[];
 let _localStorage = (typeof window !== 'undefined' && window.localStorage !== 'undefined') && window
     .localStorage;
 
 let _____jsonionInMemoryData
- = {    "sampleCollectionKey": [] || {}    };
+ = {    "urlLocations":{}||[]    };
 
 const jsonionDB = new d_b(localStorage || inMemory);
  ///    (()))
@@ -13,10 +13,58 @@ function d_b (adapter)  {
   return new (adapter({}));
 }
 
+         var urlLocations = jsonionDB
+.collection("urlLocations", {}),  url;
+
+
 chrome.extension.onMessage.addListener(
 function (request, sender, sendResponse) {
   switch (request[`type`]) {
    case  "getHighlights":
+         var highlights
+          =  getHighlights();
+
+         var url
+          =  getReducedURL(request[`url`]);
+
+         if (!highlights[url]) highlights[url]=[];
+         return sendResponse(  highlights[url]  );
+
+function  getReducedURL (url)  {
+          bfr.length=0;
+          bfr.length=2;
+          if (   bfr[1]   =
+             (   bfr[0]   =
+              jsonionDB.collection("urlLocations",
+          {} ))[ url ]) return bfr[1];
+
+                 bfr[1]
+               = reduceURL(request[`url`])
+                   .filter(part => part.length)
+                   .flatten(                 );
+
+          jsonionDB.setCollection("urlLocations",
+             Object.assign(bfr[0], 
+                        {[ bfr[1] ]: url})
+          );
+
+          return bfr[1]; 
+}
+
+   case  "storeHighlight":
+         var {str, pathObj,
+            L_str,
+            R_str}=request;
+
+         storeHighlight
+
+
+
+function  getHighlights (collection
+                      = "highlights") {
+         if (JSonionDB [`highlights`])
+     return  JSonionDB [`highlights`]; 
+
          var highlights
           =  jsonionDB.collection("highlights");
           
@@ -27,17 +75,43 @@ function (request, sender, sendResponse) {
 
        ////////
 
-             url
-          =  reduceURL(request[`url`])
-               .filter(part => part.length)
-               .flatten();
+     return (JSonionDB [`highlights`] 
+                       = highlights ); 
+}
 
-         if (!highlights[url]) highlights[url]=[];
-         return sendResponse(  highlights[url]  );
+function  storeHighlight ({  str, i
+                           L_str, 
+                           R_str, pathObj }) {
+          if  (pathObj[0] instanceof String
+          &&   ) {
+          var highlights
+           =  getHighlights();
 
+          if (!highlights[url]) 
+               highlights[url] = new Object();
 
-   case  "storeHighlight":
-          sendResponse();
+          if (!highlights[url][pathObj[0]])
+               highlights[url][pathObj[0]]
+                               = new Array();
+
+          if (!highlights[url][pathObj[0]]
+                    .find(highlightObj => 
+                  i  ===  highlightObj[  `i`  ] &&
+                str  ===  highlightObj[ `str` ] ||
+                str  ===  highlightObj[ `str` ] &&
+              L_str  ===  highlightObj.L_str    ||
+              R_str  ===  highlightObj.R_str    ))
+             {
+              
+               highlights[url][pathObj[0]]
+         .push(arguments[0])
+
+             }
+  /******////
+
+          return true;                    
+}}
+
 
    case  "removeHighlight":
           sendResponse();
@@ -188,23 +262,23 @@ function reduceURL (url, removeRoutes=[],
    =   rxUrlLocation;
  
  /////
-  var removeRoutesObj;
-  if (removeRoutes instanceof Object)
-      removeRoutesObj = (removeRoutes);
-  if (removeRoutes instanceof Array === false)
-      removeRoutes    = (    false   );
+  var  removeRoutesObj;
+  if ( removeRoutes instanceof Object)
+       removeRoutesObj = removeRoutes;
+  if (!removeRoutes instanceof Array )
+       removeRoutes    = (   false   );
 
-  var removeParamsObj;
-  if (removeParams instanceof Object)
-      removeParamsObj = (removeParams);
-  if (removeParams instanceof Array === false)
-      removeParams    = (    false   );
+  var  removeParamsObj;
+  if ( removeParams instanceof Object)
+       removeParamsObj = removeParams;
+  if (!removeParams instanceof Array )
+       removeParams    = (   false   );
 
-  var removeHashesObj;
-  if (removeHashes instanceof Object)
-      removeHashesObj = (removeHashes);
-  if (removeHashes instanceof Array === false)
-      removeHashes    = (    false   );
+  var  removeHashesObj;
+  if ( removeHashes instanceof Object)
+       removeHashesObj = removeHashes;
+  if (!removeHashes instanceof Array )
+       removeHashes    = (   false   );
 
  /////
   var match  =  rx[0].exec(url);
