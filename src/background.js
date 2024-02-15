@@ -6,9 +6,10 @@ let _localStorage = (typeof window !== 'undefined' && window.localStorage !== 'u
 let _____jsonionInMemoryData
  = {    "urlLocations":{}||[]    };
 
-const jsonionDB = new d_b(localStorage || inMemory);
+const jsonionDB = new d_b(inMemory || localStorage);
  ///    (()))
-class JSonionDB { }
+class JSonionDB {
+        Types:  { }}
 function d_b (adapter)  {
   return new (adapter({}));
 }
@@ -18,9 +19,9 @@ function d_b (adapter)  {
 
 
 chrome.extension.onMessage.addListener(
-function (request, sender, sendResponse) {
+(request, sender, sendResponse)  =>  {{
   switch (request[`type`]) {
-   case  "getHighlights":
+    case "getHighlights":
          var highlights
           =  getHighlights();
 
@@ -56,8 +57,17 @@ function  getReducedURL (url)  {
             L_str,
             R_str}=request;
 
-         storeHighlight
+         return sendResponse(
+              storeHighlight(request));
 
+
+   case  "removeHighlight":
+         var {str, pathObj,
+            L_str,
+            R_str}=request;
+
+         return sendResponse(
+              storeHighlight(request));
 
 
 function  getHighlights (collection
@@ -79,6 +89,36 @@ function  getHighlights (collection
                        = highlights ); 
 }
 
+function  find(){}
+function  findHighlight  ({  str, i
+                           L_str, 
+                           R_str, pathObj }) {
+          if  (pathObj[0] instanceof String
+          &&          str instanceof String
+          &&        L_str instanceof String
+          &&        R_str instanceof String
+          &&            i instanceof Number) {
+          var highlights
+           =  getHighlights();
+
+          if (!highlights[url]) 
+               highlights[url] = new Object();
+
+          if (!highlights[url][pathObj[0]])
+               highlights[url][pathObj[0]]
+                               = new Array();
+
+          if (bfr
+            = highlights[url][pathObj[0]]
+                   .find(highlightObj => 
+                 i  ===  highlightObj[  `i`  ] &&
+               str  ===  highlightObj[ `str` ] ||
+               str  ===  highlightObj[ `str` ] &&
+             L_str  ===  highlightObj.L_str    ||
+             R_str  ===  highlightObj.R_str    ))
+        return bfr;
+}}
+
 function  storeHighlight ({  str, i
                            L_str, 
                            R_str, pathObj }) {
@@ -94,31 +134,20 @@ function  storeHighlight ({  str, i
                highlights[url][pathObj[0]]
                                = new Array();
 
-          if (!highlights[url][pathObj[0]]
-                    .find(highlightObj => 
-                  i  ===  highlightObj[  `i`  ] &&
-                str  ===  highlightObj[ `str` ] ||
-                str  ===  highlightObj[ `str` ] &&
-              L_str  ===  highlightObj.L_str    ||
-              R_str  ===  highlightObj.R_str    ))
-             {
-              
-               highlights[url][pathObj[0]]
+          if (!findHighlight(arguments[0])
+               highlights[url][pathObj[0]])
          .push(arguments[0])
-
-             }
   /******////
 
-          return true;                    
+          return true;
+
 }}
-
-
-   case  "removeHighlight":
-          sendResponse();
-
-   ////   chrome.pageAction.show(sender.tab.id);
-  }
-});
+function  removeHighlight ({  str, i,
+                            L_str, 
+                            R_str, pathObj }) {}
+    
+  ////  chrome.pageAction.show(sender.tab.id);
+}};
 
 const rxUrlLocation = Object.assign((bfr=[],
  [   /^(.*):/,
@@ -174,14 +203,81 @@ function inMemory (d_b = {
      d_b.clear = () => 
   (_____jsonionInMemoryData = {});
     
-     d_b.collection    =    (k,   v=undefined) =>
-    _____jsonionInMemoryData[k] !== undefined  &&
-   (_____jsonionInMemoryData[k]              ) ||
-                            (v) !== undefined  &&
+     d_b.collection    =    (k,   v=undefined)  =>
+    _____jsonionInMemoryData[k] !== undefined   &&
+   (_____jsonionInMemoryData[k]              )  ||
+                            (v) !== undefined   &&
    (_____jsonionInMemoryData[k] = v          ); 
 
-  return d_b;
+     d_b.find = (k, predicate)  =>
+    _____jsonionInMemoryData[k] instanceof Array
+&& (          typeof predicate  ==  "function"
+   ?_____jsonionInMemoryData[k].find(predicate)
+   :_____jsonionInMemoryData[k].find(findInArray
+                               .bind(predicate)))
+
+   (_____jsonionInMemoryData[k] instanceof Object
+&&            typeof predicate  ==  "function"
+   ?                               findInObject
+               .bind(predicate)(
+   :_____jsonionInMemoryData[k]
+                              ));
+
+    return (d_b);
 }
+
+function findInArray (row) {
+     var predicate = this,
+   TYPE;
+
+  switch (true) {
+
+   case  Object === predicate.constructor &&
+/*/\/\/\ / \/\/\/*/ predicate  =  (Object
+        .entries(   predicate   )  ):
+
+   case  Array  === predicate.constructor &&
+/*/\/\/ \/  \/\/*/  predicate  = 
+                  (predicate.entries()):
+
+         default:
+  return predicate.every(([qItem, i]) => 
+         undefined  ===  ( row[i]   ) &&
+         undefined  ===  ( qItem    ) ||
+
+  (TYPE=(JSonionDB.Types[
+
+                Symbol.for(qItem)
+
+                                   ]) &&
+   TYPE === typeof row[i]             ||
+  qItem ===        row[i]));
+
+}}
+
+function findInObject (obj) {
+     var predicate = this,
+   TYPE;
+
+  switch (true) {
+   case  Object === predicate.constructor &&
+/*/\/\/\ / \/\/\/*/ predicate  =  (Object
+        .entries(   predicate   )  ):
+
+         default:
+  return predicate.every(([qItem, k]) => 
+         undefined  ===  ( row[k]   ) &&
+         undefined  ===  ( qItem    ) ||
+
+  (TYPE=(JSonionDB.Types[
+
+                Symbol.for(qItem)
+
+                                   ]) &&
+   TYPE === typeof row[k]             ||
+  qItem ===        row[k]));
+
+}}
 
 function localStorage (d_b) {
   if  (!_localStorage)
