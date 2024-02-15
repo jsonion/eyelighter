@@ -7,15 +7,15 @@ class reactiveComponentOnion extends Object {
   }
 
   static sourced = new Map(/*^^*/);
-__modifyState (STATE_, path=[""], _MERGE=null) {
-    if  (this.formatInput(STATE_, path))
-                         [STATE_, path] =
-         this.formatInput(STATE_, path);
+__modifyState (STATE_, path=[""], _MERGE) {
+    if  (this.formatInput(propObject, path))
+                         [propObject, path] =
+         this.formatInput(propObject, path);
          else throw (";");
         /****       (()))
-*///////
-  return this.traverseTree(
-         this.state, path, STATE_, _MERGE);
+  */////
+    this.traverseTree(
+    this.state, path, STATE_, _MERGE=false);
   }
 
   static
@@ -31,7 +31,7 @@ __formatInput=[];
      ===       propObj[ 1 ]  ) return (
                formatInput[1]
                              );
-   ////////////*************/
+   /////////////************/
 
     if (typeof propObj     != "object"
     ||  typeof propObjPath != "string"
@@ -41,25 +41,17 @@ __formatInput=[];
     if (typeof propObjPath    === "string") {
     if ((      propObjPath[0] ===    "\\"))
                propObjPath
-            =  propObjPath
+             = propObjPath
                 .substring(1).split("\\.");
-
     else if (( propObjPath[0] ===    "\."))
                propObjPath
-            =  propObjPath
+             = propObjPath
                 .substring(1).split("\.");
-
-    else       propObjPath
-            = [propObjPath];
     }
-    //////////************/
 
-             __formatInput.splice(0, 3,
-               propObj, 
-               propObjPath);
-
-      return  [propObj,
-               propObjPath];
+         __formatInput.splice(0, 3, propObj, 
+                                    propObjPath);
+    return propObjPath;
   }
 
   static traverseTree (propObject,  propObjPath,
@@ -71,10 +63,10 @@ __formatInput=[];
              if
             (__formatInput[2]    &&
              __formatInput[0]
-     ===       propObject[ 1 ]) return (
-                                 true
-                              );
-   /////////////*************/
+     ===       propObj[ 1 ]  ) return (
+                                true
+                             );
+   /////////////************/
 
     if  (this.formatInput(propObject, subkey))
                          [propObject, subkey] =
@@ -105,9 +97,8 @@ __formatInput=[];
       :  propObject[key].push(value);
     else propObject[key] = (value);
 
-       __formatInput[2]
+    this.__formatInput[2]
             = (true);
-    return    (true);
   }
 
   assignState (propObj,
@@ -115,12 +106,10 @@ __formatInput=[];
     var
     keyNames,   defaultVal,    FUNC____;
 
-    if (this.formatInput(propObject, propObjPath)) {
+    if (this.formatInput(propObject, propObjPath))
                         [propObject, propObjPath]
-      = this.formatInput(propObject, propObjPath);
-    }   else throw (";");
- 
- 
+     =  this.formatInput(propObject, propObjPath);
+
    /////////////                    /////////////
   /*****       [  case performant  ]
         
@@ -202,13 +191,13 @@ __formatInput=[];
         iterate = propObj.values();
 
     var  defaultArr
-     = (!defaultVal instanceof Array ) && null;
+     = (!defaultVal instanceof Array ) && false;
 
     var  defaultObj
-     = (!defaultVal instanceof Object) && null;
+     = (!defaultVal instanceof Object) && false;
 
     var  val, bfr;
-    for (let [i, name] of keyNames.entries()) {
+    for (let [i,name] of fieldNames.entries()) {
      switch
      (true) {
       case   FUNC____         /////////**********
@@ -253,9 +242,8 @@ __formatInput=[];
                               /////////**********
                                         continue;
     /**********///\/\/\/\/\///
-      default: 
-         if   (undefined      !== (defaultVal))
-                STATE_[name]   =   defaultVal;
+       break
+      default:  STATE_[name]   =   defaultVal;
 
     }    if    (typeof
                 STATE_[name] === ("function")
@@ -269,6 +257,10 @@ __formatInput=[];
 
   /*/\/\/\/\/\/\/\/ \ / \  /\/\/\/\/\/ \ / \/\/*/
 
+    function isBind (fn) {
+      return fn.name.startsWith("bound ");
+    }
+
     function getVal (key=("")) {
         if   (iterate !== undefined)
       { if   (iterate)
@@ -278,10 +270,6 @@ __formatInput=[];
        else
       return props
             [ key ]}
-
-    function isBind (fn) {
-      return fn.name.startsWith("bound ");
-    }
   }
 
   formatState (propObject, subkey,
