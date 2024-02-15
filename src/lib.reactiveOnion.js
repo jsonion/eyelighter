@@ -7,15 +7,15 @@ class reactiveComponentOnion extends Object {
   }
 
   static sourced = new Map(/*^^*/);
-__modifyState (STATE_, path=[""], _MERGE=null) {
-    if  (this.formatInput(STATE_, path))
-                         [STATE_, path] =
-         this.formatInput(STATE_, path);
+__modifyState (STATE_, path=[""], _MERGE) {
+    if  (this.formatInput(propObject, path))
+                         [propObject, path] =
+         this.formatInput(propObject, path);
          else throw (";");
         /****       (()))
-*///////
-  return this.traverseTree(
-         this.state, path, STATE_, _MERGE);
+  */////
+    this.traverseTree(
+    this.state, path, STATE_, _MERGE=false);
   }
 
   static
@@ -31,37 +31,27 @@ __formatInput=[];
      ===       propObj[ 1 ]  ) return (
                formatInput[1]
                              );
-   ////////////*************/
+   /////////////************/
 
     if (typeof propObj     != "object"
     ||  typeof propObjPath != "string"
     &&        !propObjPath instanceof Array)
         return false;
 
-    if (typeof propObjPath    === "string")
-        switch
-       (       propObjPath[0]) {
-         case 
-         "\\": propObjPath =
+    if (typeof propObjPath    === "string") {
+    if ((      propObjPath[0] ===    "\\"))
                propObjPath
-                .substring(1).split("\\."); break
-         case 
-         "\.": propObjPath =
+             = propObjPath
+                .substring(1).split("\\.");
+    else if (( propObjPath[0] ===    "\."))
                propObjPath
-                .substring(1).split("\.");  break
+             = propObjPath
+                .substring(1).split("\.");
+    }
 
-               default:
-               propObjPath =
-              [propObjPath];
-
-    } ////////************/
-
-             __formatInput.splice(0, 3,
-               propObj, 
-               propObjPath);
-
-      return  [propObj,
-               propObjPath];
+         __formatInput.splice(0, 3, propObj, 
+                                    propObjPath);
+    return propObjPath;
   }
 
   static traverseTree (propObject,  propObjPath,
@@ -73,10 +63,10 @@ __formatInput=[];
              if
             (__formatInput[2]    &&
              __formatInput[0]
-     ===       propObject[ 1 ]) return (
-                                 true
-                              );
-   /////////////*************/
+     ===       propObj[ 1 ]  ) return (
+                                true
+                             );
+   /////////////************/
 
     if  (this.formatInput(propObject, subkey))
                          [propObject, subkey] =
@@ -107,9 +97,8 @@ __formatInput=[];
       :  propObject[key].push(value);
     else propObject[key] = (value);
 
-       __formatInput[2]
+    this.__formatInput[2]
             = (true);
-    return    (true);
   }
 
   assignState (propObj,
@@ -117,11 +106,9 @@ __formatInput=[];
     var
     keyNames,   defaultVal,    FUNC____;
 
-    if (this.formatInput(propObject, propObjPath)) {
+    if (this.formatInput(propObject, propObjPath))
                         [propObject, propObjPath]
-      = this.formatInput(propObject, propObjPath);
-    }   else throw (";");
- 
+     =  this.formatInput(propObject, propObjPath);
 
    /////////////                    /////////////
   /*****       [  case performant  ]
@@ -204,13 +191,13 @@ __formatInput=[];
         iterate = propObj.values();
 
     var  defaultArr
-     = (!defaultVal instanceof Array ) && null;
+     = (!defaultVal instanceof Array ) && false;
 
     var  defaultObj
-     = (!defaultVal instanceof Object) && null;
+     = (!defaultVal instanceof Object) && false;
 
     var  val, bfr;
-    for (let [i, name] of keyNames.entries()) {
+    for (let [i,name] of fieldNames.entries()) {
      switch
      (true) {
       case   FUNC____         /////////**********
@@ -255,9 +242,8 @@ __formatInput=[];
                               /////////**********
                                         continue;
     /**********///\/\/\/\/\///
-      default: 
-         if   (undefined      !== (defaultVal))
-                STATE_[name]   =   defaultVal;
+       break
+      default:  STATE_[name]   =   defaultVal;
 
     }    if    (typeof
                 STATE_[name] === ("function")
@@ -271,6 +257,10 @@ __formatInput=[];
 
   /*/\/\/\/\/\/\/\/ \ / \  /\/\/\/\/\/ \ / \/\/*/
 
+    function isBind (fn) {
+      return fn.name.startsWith("bound ");
+    }
+
     function getVal (key=("")) {
         if   (iterate !== undefined)
       { if   (iterate)
@@ -280,10 +270,6 @@ __formatInput=[];
        else
       return props
             [ key ]}
-
-    function isBind (fn) {
-      return fn.name.startsWith("bound ");
-    }
   }
 
   formatState (propObject, subkey,
@@ -344,198 +330,6 @@ __formatInput=[];
         ////////*************/
 
   }      return stylePropVal;
-  }
-}
-
-
-const rxHandleNameRandom = Object.assign(
-    function (string, rx = this) {
-          if (rx[0].test(string))
-           {  return (!false)   }
-
-          var match;  rx[1].lastIndex=0;
-          if (match = rx[1].exec(string))
-          if (match[ 
-
-                 rx.singleCaps
-               
-                                 ]
-          &&     match.index     !== 0
-          &&     rx[1].lastIndex !== 0
-          &&     rx[1].lastIndex !== string
-                                    .length)
-           {     return (!false)     }
-
-
-          if (match = rx[2].exec(string.match))
-          if (rx[2].test(string)
-          && !match[ 
-
-                 rx.endRegular  
-            
-                                    ])
-           {     return (!false)     }
-                   
-                  else
-                 return (
-                 !true
-           );  //////////**********/
-  },[
-                                new RegExp(
-          "^"       +
-  "(?:" + "([0-9])" +
-   "|"  + "([a-z]"  + "[A-Z0-9])" +
-   "|"  + "(-)"     + ")",          'g'),
-
-                                new RegExp(
-  "(?:" + "([^a-zA-Z0-9\-_])"     +
-   "|"  + "(--)"                  +
-   "|"  + "(___)"                 +
-   "|"  + "([A-Z][0-9])"          + ")",
-                                    'g'),
-
-                                new RegExp(
-  "(?:" + "([\-_])"        +
-   "|"  + "([0-9]+[A-Z]?)" +
-   "|"  + "([A-Z]?[0-9]+)" +
-   "|"  + "   ([a-zA-Z])"  + ")$",  'g'),
-
-  ],{   startNumeric: 1,
-        startNonCaps: 2,
-        startDash:    3,
-
-              symbol: 1,
-          doubleDash: 2,
-          underscore: 3,
-          singleCaps: 4,
-
-             endDash: 1, endRegular:  4,
-                         endNumeric1: 3, 
-                         endNumericB: 2,
-});
-
-function mapUniqueHandles (elem) {
- var cls;
- var res
-  = [elem.tagName,
-     elem.getAttribute("id"),
-    /*****          */,
- ...(
- cls  =  [[  ], [ ],[]]
-        )
-        ], str, bfr;
-
- if  (elem.classList.length)               {
- for (let  className  of  elem.classList ) {
-  if (rxHandleNameRandom(   className   ))
-             cls[0].push(   className   );
-      else   cls[1].push(   className   );
-                break;
-  }
-
-  switch (true) {
-   ////  try unique classes
-   case  cls[2].length
-    &&
-    isUniqueRes(cls, 1): return res;
-
-    function
-    isUniqueRes(cls, i) {
-         bfr = (
-        document.querySelectorAll(
-         str = (
-        elem.tagName + "." + cls.slice(0, i+1)
-                                 .flatten( )
-                                  .join( '.' ))))
-    if  (bfr[0] === elem) {
-         res[2]  =  str;
-    if (!bfr[1])
-         res.splice(3,3,
-       ...cls.slice(0,(  i+1  )).flatten());
-
-       return true;
-    }}
-  }}
-
-  if    (res[1])
-  return res.slice(0, 2);
-  return false;
-}
-
-function mapUniquePath (elem) {
-   let   res = [  ,     ,    ], 
-               cur, prev, next;
-   let  _MAP
-    =  this;
-   
-   if (cur = mapUniqueHandles(elem)) {
-   if ( id = bfr[1]) return (
-  _MAP.push([bfr]), undefined);
-
-   else
-   res[0.] = bfr;
-   }
-
- //////******
-
-   if (prev = mapUniqueHandles(elem
-            .previousElementSibling))
-   if ( id = bfr[1]) {
-   res[1.] = bfr;
-   return (
-  _MAP.push( res ), undefined)}
-
- //////******
-
-   if (prev = mapUniqueHandles(elem
-            .nextElementSibling))
-   if ( id = bfr[1]) {
-   res[1.] = bfr;
-   return (
-  _MAP.push( res ), undefined)}
-
- //////******
-
-   return (  res  );
-}
-
-function getElementAncestors (elem, execFn) {
-  if (!elem   instanceof Element
-  ||  !execFn instanceof Function)
-       return false;
-
-  var _MAP=[],_STOP;
-
-  if (typeof execFn === "string")
-      var qSelector  =  execFn,
-             execFn  =  (elem) =>
-                         elem.matches(qSelector)
-                                      ||   null;
-
-      do { elem = elem.parentElement;
-     try {
-  switch ( elem                       &&
-         (_STOP = execFn.call(_MAP, elem))) {
-    case (undefined):
-          continue;
-
-    case  true:
-         _MAP.push(elem);
-          break;
-
-    case  false:
-          return false;
-
-    case  1:
-         _MAP.push(elem);
-
-    case  1: default:
-          return _MAP.length && _MAP
-                             || false;
-  }}
-  catch ( ee ){ throw "Invalid query selector" }}
-  while (true)
-}
+}}
 
 export default reactiveComponentOnion;
-export { rxHandleNameUnique, mapUniqueHandles };
