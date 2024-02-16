@@ -1,4 +1,8 @@
-class reactiveComponentOnion extends Object {
+const componentIdent     =     (tag, id, cls) =>
+              makeElementHandle(tag, id, cls) ||
+      Symbol( makeElementHandle(tag, id, cls) );
+
+export class JSonionComponent extends Object {
   #terminatorSymbol = "\\$";
 
   constructor (props=null) {
@@ -7,15 +11,15 @@ class reactiveComponentOnion extends Object {
   }
 
   static sourced = new Map(/*^^*/);
-__modifyState (STATE_, path=[""], _MERGE) {
-    if  (this.formatInput(propObject, path))
-                         [propObject, path] =
-         this.formatInput(propObject, path);
+__modifyState (STATE_, path=[""], _MERGE=null) {
+    if  (this.formatInput(STATE_, path))
+                         [STATE_, path] =
+         this.formatInput(STATE_, path);
          else throw (";");
         /****       (()))
-  */////
-    this.traverseTree(
-    this.state, path, STATE_, _MERGE=false);
+*///////
+  return this.traverseTree(
+         this.state, path, STATE_, _MERGE);
   }
 
   static
@@ -31,27 +35,37 @@ __formatInput=[];
      ===       propObj[ 1 ]  ) return (
                formatInput[1]
                              );
-   /////////////************/
+   ////////////*************/
 
     if (typeof propObj     != "object"
     ||  typeof propObjPath != "string"
     &&        !propObjPath instanceof Array)
         return false;
 
-    if (typeof propObjPath    === "string") {
-    if ((      propObjPath[0] ===    "\\"))
+    if (typeof propObjPath    === "string")
+        switch
+       (       propObjPath[0]) {
+         case 
+         "\\": propObjPath =
                propObjPath
-             = propObjPath
-                .substring(1).split("\\.");
-    else if (( propObjPath[0] ===    "\."))
+                .substring(1).split("\\."); break
+         case 
+         "\.": propObjPath =
                propObjPath
-             = propObjPath
-                .substring(1).split("\.");
-    }
+                .substring(1).split("\.");  break
 
-         __formatInput.splice(0, 3, propObj, 
-                                    propObjPath);
-    return propObjPath;
+               default:
+               propObjPath =
+              [propObjPath];
+
+    } ////////************/
+
+             __formatInput.splice(0, 3,
+               propObj, 
+               propObjPath);
+
+      return  [propObj,
+               propObjPath];
   }
 
   static traverseTree (propObject,  propObjPath,
@@ -63,10 +77,10 @@ __formatInput=[];
              if
             (__formatInput[2]    &&
              __formatInput[0]
-     ===       propObj[ 1 ]  ) return (
-                                true
-                             );
-   /////////////************/
+     ===       propObject[ 1 ]) return (
+                                 true
+                              );
+   /////////////*************/
 
     if  (this.formatInput(propObject, subkey))
                          [propObject, subkey] =
@@ -97,8 +111,9 @@ __formatInput=[];
       :  propObject[key].push(value);
     else propObject[key] = (value);
 
-    this.__formatInput[2]
+       __formatInput[2]
             = (true);
+    return    (true);
   }
 
   assignState (propObj,
@@ -106,9 +121,11 @@ __formatInput=[];
     var
     keyNames,   defaultVal,    FUNC____;
 
-    if (this.formatInput(propObject, propObjPath))
+    if (this.formatInput(propObject, propObjPath)) {
                         [propObject, propObjPath]
-     =  this.formatInput(propObject, propObjPath);
+      = this.formatInput(propObject, propObjPath);
+    }   else throw (";");
+ 
 
    /////////////                    /////////////
   /*****       [  case performant  ]
@@ -191,13 +208,13 @@ __formatInput=[];
         iterate = propObj.values();
 
     var  defaultArr
-     = (!defaultVal instanceof Array ) && false;
+     = (!defaultVal instanceof Array ) && null;
 
     var  defaultObj
-     = (!defaultVal instanceof Object) && false;
+     = (!defaultVal instanceof Object) && null;
 
     var  val, bfr;
-    for (let [i,name] of fieldNames.entries()) {
+    for (let [i, name] of keyNames.entries()) {
      switch
      (true) {
       case   FUNC____         /////////**********
@@ -242,8 +259,9 @@ __formatInput=[];
                               /////////**********
                                         continue;
     /**********///\/\/\/\/\///
-       break
-      default:  STATE_[name]   =   defaultVal;
+      default: 
+         if   (undefined      !== (defaultVal))
+                STATE_[name]   =   defaultVal;
 
     }    if    (typeof
                 STATE_[name] === ("function")
@@ -257,10 +275,6 @@ __formatInput=[];
 
   /*/\/\/\/\/\/\/\/ \ / \  /\/\/\/\/\/ \ / \/\/*/
 
-    function isBind (fn) {
-      return fn.name.startsWith("bound ");
-    }
-
     function getVal (key=("")) {
         if   (iterate !== undefined)
       { if   (iterate)
@@ -270,6 +284,10 @@ __formatInput=[];
        else
       return props
             [ key ]}
+
+    function isBind (fn) {
+      return fn.name.startsWith("bound ");
+    }
   }
 
   formatState (propObject, subkey,
@@ -330,6 +348,261 @@ __formatInput=[];
         ////////*************/
 
   }      return stylePropVal;
-}}
+  }
+}
+ 
+class reactiveDOMTreeNode  extends Array {
+  ENUM_EXPR_EVAL = (3);
+  ENUM_COMPONENT = (4);
+  ENUM_COMPONENT_EXPR_SMPL = (5);
+  ENUM_COMPONENT_EXPR_EVAL = (6);
 
-export default reactiveComponentOnion;
+    ///////////////////////////////////////
+   // reactive node schema and instances
+  /* … abstract syntax tree to create instances
+
+     storing schema as object props or in array
+  ///                                         */
+  constructor (parentNode=null,
+               pathToNode=null,
+
+                component=null,
+                 template=null) {
+    if (arguments[0] === undefined)
+       {      return super();     }
+    else
+    if (!reactiveDOMTree.inArray
+    || !!reactiveDOMTree.inArray) {
+         super();
+         Object.assign(this, {
+              parent: parentNode,
+              pathTo: pathToNode,
+                   ///
+           component,
+            template,
+         },{
+            instance: null, key: null,
+             element: null,
+         },{
+            mapAttrs: new TrieOfArrayUnique(/*
+            component state to attribute mappings
+                                           */),
+          childNodes: new Array(/*
+           TEXT_EXPR, NOT_CREATED_ELEMENT,
+       VARIABLE_EXPR, NOT_CREATED_COMPONENT */),
+                meta: { modifyTpl: {},
+                        ratioPropsTrie: void 0.7,
+         /* varPaths,
+            passVars,
+            lessVars,
+            includes: { context, props, state,
+                        classVars, arbitrary } */
+  }})}
+  }
+
+   ////////////////////////
+  //  connected DOM node
+  runtimeComponent ({ instance, element, key,
+                    parentNode, pathToNode }) {
+    if (typeof instance !== "object"
+    ||  typeof  element !== "object")
+      { return }
+
+    var node;
+    var isConnected
+      = (     !this.isRuntimeNode          &&
+        typeof this.instance  === "object" &&
+        typeof this.component === "function");
+
+    if (isConnected)
+        node = this;
+    else {
+      if (this.component) {
+      if (                   instance
+      &&  this.component !== instance)
+               { return }
+    }
+    else {
+      if (typeof instance !== "object"
+      ||        !instance
+                 instanceof reactiveComponent)
+                {  return  }
+          else
+          this.component = instance.constructor;
+    }     node
+        = Object.assign(new reactiveDOMTreeNode(),
+                                             this);
+    }
+           //////////////////////////////
+             node.isRuntimeNode = true;
+    if (instance) node.instance = instance;
+    if ( element) node.element  = element;
+    if (     key) node.key      = key;
+
+    if (parentNode) node.parentNode = parentNode;
+    if (pathToNode) node.pathToNode = pathToNode;
+   ////
+    if  (typeof arguments[1] === "object")
+    for (let [key, val]
+          of Object.entries(arguments[1])) {
+     if (reactiveDOMTreeNode.runtimeVars
+                            .indexOf(key) >= 0)
+         node[key] = val;
+    }
+  }
+
+  appendText (text) {
+    if (typeof text === "string"
+    &&         text.length)
+    this.childNodes.push(text);
+  }
+
+  appendVar (varPath) {
+    if (varPath instanceof Array
+    &&  varPath.at(-1) !== "...")
+   this.childNodes.push(varPath);
+  }
+
+  appendNode
+ (tplComponentXOR, componentVarPath=null,
+                          condition=true,
+                           propsMap=null) {}
+}
+
+function getTemplate (candidate, __ANY=(false)) {
+  let metadata = [tag, id, classNames, element,
+                                      container]
+               =     getElementHandle(candidate),
+
+       nsBound = element.ownerDocument;
+
+  switch (!!metadata[0]) {
+   case   !!__ANY:
+   case  tag  ===  "template"
+    ||   tag  ===      "defs":
+    if  (element)
+         getElementAncestors(element,
+                        isInTemplate);
+                               break
+
+   case  (false):
+   case   element
+    &&   !getElementAncestors(element,
+                         isInTemplate):
+          default:     { return false }
+  }
+
+  switch   (typeof candidate) {
+   ////     element
+   case    "object":
+            return {
+
+            element,
+            container,
+
+            tag,    id,
+            classNames: cls,
+            identifier:
+    componentIdent(tag, id, cls),
+          
+            NodeList:       element
+                           .childNodes,
+
+            HTMLCollection: element
+                           .childNodes,
+   };
+   case    "string":
+   ////     literal
+    if     (template[0] === "<")
+            return {
+
+            tag,    id,
+            classNames: cls,
+            identifier:
+    componentIdent(tag, id, cls),
+
+            xmlLiteral: candidate,
+             strLength: candidate.length,
+   };
+   else
+   ////     query selector
+            return {
+
+            tag,   id,
+            classNames: cls,
+            identifier: arguments[0],
+   };
+
+  function isInTemplate (node) {
+    if (node === nsBound)
+             return false;
+
+    if (node.tagName === "template"
+    ||  node.tagName === "defs")  {
+             template = node;
+             return 1;
+}}}}
+
+class componentOnion {
+      constructor
+         (cfg)       {
+ Object.assign(this, {
+ variableTplRenderOutput:true,
+   expectTplRenderOutput:true,
+    returnTplFnComponent:'__requestStaticTpl',
+                       ///
+               component: null,
+              hasContext: false,
+           componentList: void new Map(),
+                    name: void null || "",
+                       ///
+                    type: void 0, key: void 0,
+               templates: void [],
+               tplRender: void {
+                    identifier: "",
+                  asInstanceKey: false,
+                  asFnReturnStatic: false,
+                    reactiveDOMTree: void {},
+                    stats: void { instance:false,
+                                  inRender:1.0 },
+},
+                setState: void null,
+                   state: void {},
+                   props: void {},
+                          propTypes: void {},
+                          defaultProps: void {},
+                 context: void {},
+              setContext: void null,
+              subscribe:  void null,
+            unsubscribe:  void null,
+                       /// 
+        addEventListener: void null,
+     removeEventListener: void null,
+     onComponentDidMount: void null,
+  onComponentWillUnmount: void null,
+                       ///
+                   stats: void {
+               createdAt: 0,
+               mountedAt: 0,
+             refreshedAt: 0,
+             unmountedAt: 0,
+                       ///
+            mountedCount: 0,
+            refreshCount: 0,
+                       ///
+            sameTemplate: 0,
+}})}}
+
+class reactiveComponentAsync extends
+      reactiveComponentOnion {
+constructor (path, rootComponent) {
+  try {
+  import(path).then((Component) => {
+    super()
+    this.Component = Component(props);
+/// this.loadRes = Component.__loadResAsync;
+  });
+  } catch (e) {
+    throw `${this.e.NOT_FOUND_ASYNC_COMPONENT}: ${e}`;
+  }
+}}
